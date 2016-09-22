@@ -9,8 +9,8 @@ class Task:
 
     def __init__(self, env, name):
         self.name = name
-        self.log = Log.setup(env, __name__)
-        self.log.info('Task ' + self.name + ' initialized')
+        self.log = Log().setup(env=env, task_id=__name__ + '.' + name)
+        self.log.info('Task initialized')
 
     def test(self):
-        self.log('Test')
+        self.log.info('Test')
