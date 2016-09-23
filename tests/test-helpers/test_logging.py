@@ -8,6 +8,7 @@ os.environ['MYBICI_SETUP_FILE'] = os.path.dirname(os.path.realpath(__file__)) + 
 os.environ['MYBICI_SETUP_FILE_SECTIONS'] = 'global'
 
 
+@pytest.mark.helpers
 class TestLogging:
 
     def test_init(self):

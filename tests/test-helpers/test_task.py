@@ -9,6 +9,7 @@ os.environ['MYBICI_SETUP_FILE_SECTIONS'] = 'global'
 env = helpers.env.read_env()
 
 
+@pytest.mark.helpers
 class TestTask:
     def test_not_callable(self):
         task = helpers.task.Task(env, 'test_not_callable')

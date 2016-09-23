@@ -25,14 +25,14 @@ class Command:
                                        shell=True,
                                        env=self.env,
                                        stdout=subprocess.PIPE,
-                                       stderr=subprocess.STDOUT,
+                                       stderr=subprocess.PIPE,
                                        universal_newlines=True)
 
         # Poll process for new output until finished
         while True:
-            return_code = self.result.poll()
-            if isinstance(return_code, int):
-                break
             line = self.result.stdout.readline()
+            return_code = self.result.poll()
+            if isinstance(return_code, int) and not line:
+                break
             self.log.info(line)
         return return_code
