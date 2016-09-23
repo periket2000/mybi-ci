@@ -1,6 +1,6 @@
 __author__ = 'marcoantonioalberoalbero'
 
-import os, subprocess
+import os,subprocess
 from helpers.logging import Log
 
 
@@ -25,7 +25,7 @@ class Command:
                                        shell=True,
                                        env=self.env,
                                        stdout=subprocess.PIPE,
-                                       stderr=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT,
                                        universal_newlines=True)
 
         # Poll process for new output until finished
