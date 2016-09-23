@@ -13,5 +13,5 @@ class TestLogging:
     def test_init(self):
         log = helpers.logging.Log()
         env = helpers.env.read_env()
-        logger = log.setup(env, 'test1')
-        logger.info('Test1')
+        logger = log.setup(env, 'helpers.logging.log')
+        logger.info('Testing logger')
