@@ -4,7 +4,7 @@ import configparser
 import os
 
 
-def read_env():
+def read_config():
     global config, sections
     try:
         init = os.environ['MYBICI_SETUP_FILE']

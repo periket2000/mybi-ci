@@ -16,7 +16,7 @@ pip install mybi-ci
 
 After install the command line tool, you'll get a "mybi-ci" comman line tool ready to run.
 
-### Notes
+### Notes on Logging
 
 1. Commands and Tasks name should be unique because if not, the loggers are going to log several times
 
@@ -37,6 +37,28 @@ cn.run()
 # because the logger is defined twice.
 # c1.logger is called "MYBI-CI.commands.command.c1"
 # cn.logger is called "MYBI-CI.commands.command.c1"
+```
+
+2. By default, each Task/Command comes with its own log file configured when the object is created.
+We can add a new logger file (for example the global log or the parent task log) with the method
+task.set_log() for the global log or task.set_log(log_dir='/tmp', log_file='shit.log' for a new file
+(could be the parent log).
+
+```python
+task = Task(config, name) -> comes with its own log file configured (based on the name and config)
+cmd = Command(config, name) -> comes with its own log file configured (based on the name and config)
+```
+
+3. We can onsolidate logs on the set_log only file with the flag consolidate (True by default)
+
+```python
+task.set_log(consolidate=False) -> writes to it's own file and to the global file.
+command.set_log(consolidate=False) -> idem
+task.set_log(log_dir='/tmp', log_file='other.log', consolidate=False) -> writes to it's own file and to /tmp/other.log
+...
+task.set_log() / task.set_log(consolidate=True) -> writes to the global file.
+command.set_log() / command.set_log(consolidate=True) -> idem
+task.set_log(log_dir='/tmp', log_file='other.log') / task.set_log(log_dir='/tmp', log_file='other.log', consolidate=True) -> writes to /tmp/other.log
 ```
 
 ### Tests
