@@ -34,31 +34,21 @@ cn.set_command('du -h')
 cn.run()
 
 # cn is going to be logged twice!!!
-# because the logger is defined twice.
+# because the logger is defined twice and both share the same log file
 # c1.logger is called "MYBI-CI.commands.command.c1"
 # cn.logger is called "MYBI-CI.commands.command.c1"
 ```
 
-2. By default, each Task/Command comes with its own log file configured when the object is created.
-We can add a new logger file (for example the global log or the parent task log) with the method
-task.set_log() for the global log or task.set_log(log_dir='/tmp', log_file='shit.log' for a new file
-(could be the parent log).
+2. The system log is configured depending on the 'global':'log_consolidate_only' config value.
+If this value is True, all the tasks and sub tasks log to the global consolidated log file.
+If this value if False, all the tasks logs to its own log file and to its ancestors (not only the parent) log file.
+
+3. By default, each Task/Command comes with its own log file configured when the object is created.
+But if we choose log_consolidated_only=True, this log file is overwrite by the global system log file. 
 
 ```python
 task = Task(config, name) -> comes with its own log file configured (based on the name and config)
 cmd = Command(config, name) -> comes with its own log file configured (based on the name and config)
-```
-
-3. We can onsolidate logs on the set_log only file with the flag consolidate (True by default)
-
-```python
-task.set_log(consolidate=False) -> writes to it's own file and to the global file.
-command.set_log(consolidate=False) -> idem
-task.set_log(log_dir='/tmp', log_file='other.log', consolidate=False) -> writes to it's own file and to /tmp/other.log
-...
-task.set_log() / task.set_log(consolidate=True) -> writes to the global file.
-command.set_log() / command.set_log(consolidate=True) -> idem
-task.set_log(log_dir='/tmp', log_file='other.log') / task.set_log(log_dir='/tmp', log_file='other.log', consolidate=True) -> writes to /tmp/other.log
 ```
 
 ### Tests

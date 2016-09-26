@@ -8,8 +8,10 @@ from helpers.logging import Log
 
 class Command:
     def __init__(self, config, name):
+        self.parent = None
         self.name = name
         self.config = config
+        self.consolidate_only = True if config.get('global', 'log_consolidate_only') == "True" else False
         self.command = None
         self.result = None
         self.env = dict(os.environ)
@@ -26,6 +28,11 @@ class Command:
         self.env[key] = value
 
     def run(self):
+        if not self.consolidate_only:
+            Log.consolidate_log(task=self, hierarchy_node=self.parent)
+        else:
+            Log.set_log(self, consolidate_only=True)
+
         Log.id_log(self.log, "running command " + self.command)
         self.result = subprocess.Popen(self.command,
                                        shell=True,

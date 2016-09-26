@@ -7,12 +7,22 @@ import uuid
 class Log:
 
     config = None
+    consolidate_only = None
 
     def __init__(self):
         self.default_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
     def setup(self, config, task_id, log_dir=None, log_file=None):
+        """
+        Setup the default logger for the task_id in question
+        :param config: config environment
+        :param task_id: id of the task whose logger is going to be configured
+        :param log_dir: the dir where the files are kept (None is config default)
+        :param log_file: the log file (None is config default)
+        :return:
+        """
         Log.config = config
+        Log.consolidate_only = True if config.get('global', 'log_consolidate_only') == "True" else False
         level = (logging.DEBUG if 'debug' in config.get('global', 'log_level') else logging.INFO)
         log_format = (config.get('global', 'log_format')
                       if config.get('global', 'log_format')
@@ -56,8 +66,23 @@ class Log:
         """
         if consolidate_only:
             # log to the consolidated file (here it breaks with its own logger, it's not part of the logger hierarchy)
+            # so it only logs in this l_file.
             tid = 'consolidated.' + task.id
         else:
-            # log to its own logger and to this new child logger (because it's part of the logger hierarchy)
-            tid = task.id + '.child.log'
+            # add a new child logger (because it's part of the logger hierarchy)
+            tid = task.id
         task.log = Log().setup(config=Log.config, task_id=tid, log_dir=l_dir, log_file=l_file)
+
+    @staticmethod
+    def consolidate_log(task, hierarchy_node=None):
+        """
+        Consolidate the log of the task to every task ancestor
+        :param task: task whose log is going to be consolidated
+        :param hierarchy_node: ancestor
+        :return:
+        """
+        if not Log.consolidate_only:
+            if hierarchy_node:
+                Log.set_log(task, consolidate_only=False, l_file=hierarchy_node.log_file)
+                if hierarchy_node.parent:
+                    Log.consolidate_log(task, hierarchy_node=hierarchy_node.parent)

@@ -8,8 +8,10 @@ from helpers.logging import Log
 
 class Task:
     def __init__(self, config, name):
+        self.parent = None
         self.name = name
         self.config = config
+        self.consolidate_only = True if config.get('global', 'log_consolidate_only') == "True" else False
         self.parallel_tasks = Queue()
         self.sequential_tasks = Queue()
         self.id = __name__ + '.' + name
@@ -26,12 +28,18 @@ class Task:
 
     def add_task(self, task, sequential=True):
         if self.is_runnable(task):
+            task.parent = self
             if sequential:
                 self.sequential_tasks.put(task)
             else:
                 self.parallel_tasks.put(task)
 
     def run(self):
+        if not self.consolidate_only:
+            Log.consolidate_log(task=self, hierarchy_node=self.parent)
+        else:
+            Log.set_log(self, consolidate_only=True)
+
         Log.id_log(self.log, "running task " + self.name)
         while not self.parallel_tasks.empty():
             task = self.parallel_tasks.get()
