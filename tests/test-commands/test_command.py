@@ -3,7 +3,6 @@ import pytest
 import os
 from commands.command import Command
 import helpers.env
-from helpers.logging import Log
 
 os.environ['MYBICI_SETUP_FILE'] = os.path.dirname(os.path.realpath(__file__)) + '/../../conf/env.pro'
 os.environ['MYBICI_SETUP_FILE_SECTIONS'] = 'global'
