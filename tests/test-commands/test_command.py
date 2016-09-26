@@ -3,6 +3,7 @@ import pytest
 import os
 from commands.command import Command
 import helpers.env
+from helpers.logging import Log
 
 os.environ['MYBICI_SETUP_FILE'] = os.path.dirname(os.path.realpath(__file__)) + '/../../conf/env.pro'
 os.environ['MYBICI_SETUP_FILE_SECTIONS'] = 'global'
@@ -18,7 +19,7 @@ class TestCommand:
         command.add_env_var('MAVEN_HOME', '/Users/marcoantonioalberoalbero/Documents/OHIM/bin/apache-maven-3.3.9')
         command.set_command('cd /Users/marcoantonioalberoalbero/Documents/OHIM/src/SP-FO-1.0.0-JAVA8-SPRING4-UPGRADE/external && mvn test')
         # log to global log (config:env.pro)
-        command.set_log()
+        Log.set_log(command)
         command.run()
 
     def test_run_ls(self):
@@ -26,5 +27,5 @@ class TestCommand:
         command.add_env_var('MYENV_VAR', 'ROCK!')
         command.set_command('ls -l')
         # log to global log (config:env.pro)
-        command.set_log()
+        Log.set_log(command)
         command.run()

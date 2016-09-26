@@ -24,15 +24,6 @@ class Task:
             return True
         return False
 
-    def set_log(self, l_dir=None, l_file=None, consolidate=True):
-        if consolidate:
-            # log to the consolidated file (here it breaks with its own logger, it's not part of the logger hierarchy)
-            tid = 'consolidated.' + self.id
-        else:
-            # log to its own logger and to this new child logger (because it's part of the logger hierarchy)
-            tid = self.id + '.child.log'
-        self.log = Log().setup(config=self.config, task_id=tid, log_dir=l_dir, log_file=l_file)
-
     def add_task(self, task, sequential=True):
         if self.is_runnable(task):
             if sequential:
@@ -41,7 +32,7 @@ class Task:
                 self.parallel_tasks.put(task)
 
     def run(self):
-        self.log.info("running task " + self.name)
+        Log.id_log(self.log, "running task " + self.name)
         while not self.parallel_tasks.empty():
             task = self.parallel_tasks.get()
             t = threading.Thread(target=task.run)

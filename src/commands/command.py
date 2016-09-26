@@ -25,17 +25,8 @@ class Command:
     def add_env_var(self, key, value):
         self.env[key] = value
 
-    def set_log(self, l_dir=None, l_file=None, consolidate=True):
-        if consolidate:
-            # log to the consolidated file (here it breaks with its own logger, it's not part of the logger hierarchy)
-            cid = 'consolidated.' + self.id
-        else:
-            # log to its own logger and to this new child logger (because it's part of the logger hierarchy)
-            cid = self.id + '.child.log'
-        self.log = Log().setup(config=self.config, task_id=cid, log_dir=l_dir, log_file=l_file)
-
     def run(self):
-        self.log.info("running command " + self.command)
+        Log.id_log(self.log, "running command " + self.command)
         self.result = subprocess.Popen(self.command,
                                        shell=True,
                                        env=self.env,
@@ -49,5 +40,5 @@ class Command:
             return_code = self.result.poll()
             if isinstance(return_code, int) and not line:
                 break
-            self.log.info(line)
+            Log.id_log(self.log, line)
         return return_code
