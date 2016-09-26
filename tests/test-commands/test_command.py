@@ -18,14 +18,10 @@ class TestCommand:
         command = Command(env, 'command.mvn')
         command.add_env_var('MAVEN_HOME', '/Users/marcoantonioalberoalbero/Documents/OHIM/bin/apache-maven-3.3.9')
         command.set_command('cd /Users/marcoantonioalberoalbero/Documents/OHIM/src/SP-FO-1.0.0-JAVA8-SPRING4-UPGRADE/external && mvn test')
-        # log to global log (config:env.pro)
-        Log.set_log(command)
         command.run()
 
     def test_run_ls(self):
         command = Command(env, 'command.ls')
         command.add_env_var('MYENV_VAR', 'ROCK!')
         command.set_command('ls -l')
-        # log to global log (config:env.pro)
-        Log.set_log(command)
         command.run()
