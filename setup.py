@@ -21,6 +21,9 @@ CLASSIFIERS = [
     "Programming Language :: Python :: Implementation :: PyPy"
 ]
 INSTALL_REQUIRES = [
+    'jsonschema>=2.5.1',
+    'args>=0.1.0',
+    'click>=6.6'
 ]
 TEST_REQUIRE = [
     'pytest>=3.0.1',
