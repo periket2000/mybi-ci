@@ -12,7 +12,7 @@ class Log:
     def __init__(self):
         self.default_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-    def setup(self, config, task_id, log_dir=None, log_file=None):
+    def setup(self, config, task_id, log_dir=None, log_file=None, with_console=True):
         """
         Setup the default logger for the task_id in question
         :param config: config environment
@@ -32,12 +32,13 @@ class Log:
         ld = (log_dir if log_dir else config.get('global', 'log_dir'))
         lf = (log_file if log_file else config.get('global', 'log_file'))
         fh = logging.FileHandler(ld+'/'+lf)
-        ch = logging.StreamHandler()
         formatter = logging.Formatter(log_format)
         fh.setFormatter(formatter)
-        ch.setFormatter(formatter)
         logger.addHandler(fh)
-        logger.addHandler(ch)
+        if with_console:
+            ch = logging.StreamHandler()
+            ch.setFormatter(formatter)
+            logger.addHandler(ch)
         return logger
 
     @staticmethod
@@ -55,7 +56,7 @@ class Log:
             logger.debug(str(uuid.uuid1()) + " - " + msg)
 
     @staticmethod
-    def set_log(task, l_dir=None, l_file=None, consolidate_only=True):
+    def set_log(task, l_dir=None, l_file=None, consolidate_only=True, with_console=True):
         """
         Adds the logger with logger_id new loggers to log with
         :param task: the task to configure the log for
@@ -71,7 +72,11 @@ class Log:
         else:
             # add a new child logger (because it's part of the logger hierarchy)
             tid = task.id
-        task.log = Log().setup(config=Log.config, task_id=tid, log_dir=l_dir, log_file=l_file)
+        task.log = Log().setup(config=Log.config,
+                               task_id=tid,
+                               log_dir=l_dir,
+                               log_file=l_file,
+                               with_console=with_console)
 
     @staticmethod
     def consolidate_log(task, hierarchy_node=None):
@@ -83,6 +88,6 @@ class Log:
         """
         if not Log.consolidate_only:
             if hierarchy_node:
-                Log.set_log(task, consolidate_only=False, l_file=hierarchy_node.log_file)
+                Log.set_log(task, consolidate_only=False, l_file=hierarchy_node.log_file, with_console=False)
                 if hierarchy_node.parent:
                     Log.consolidate_log(task, hierarchy_node=hierarchy_node.parent)
