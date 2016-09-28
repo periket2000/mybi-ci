@@ -1,0 +1,22 @@
+{
+  "build": "my brand new build",
+  "starter": {
+    "id": "My_task_id_125.task",
+    "sequential_tasks": [
+      {
+        "id": "command.ls",
+        "env": [
+          {
+            "DIR": "/tmp",
+            "FILE": "*"
+          }
+        ],
+        "cmd": "ls $DIR/$FILE"
+      },
+      {
+        "id": "command.df",
+        "cmd": "df -h"
+      }
+    ]
+  }
+}

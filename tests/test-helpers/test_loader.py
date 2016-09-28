@@ -26,3 +26,16 @@ class TestLoader:
         if result['valid']:
             t = Loader.load(build["starter"])
         assert t is not None
+
+    def test_load_build2(self):
+        t = None
+        schema_file = os.path.dirname(os.path.realpath(__file__)) + "/../builds/schema.json"
+        with open(schema_file) as data_file:
+            schema = json.load(data_file)
+        build_file = os.path.dirname(os.path.realpath(__file__)) + "/../builds/build2.json"
+        with open(build_file) as data_file:
+            build = json.load(data_file)
+        result = JsonValidator.validate(build, schema)
+        if result['valid']:
+            t = Loader.load(build["starter"])
+        assert t is not None
