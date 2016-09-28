@@ -4,16 +4,18 @@
     "id": "My_task_id_125.task",
     "parallel_tasks": [
       {
-        "id": "command.ls",
+        "id": "1",
         "env": [
-          {"DIR": "/tmp"},
-          {"FILE": "*"}
+          {
+            "DIR": "/tmp",
+            "FILE": "*"
+          }
         ],
         "cmd": "ls $DIR/$FILE"
       },
       {
-        "id": "command.df",
-        "cmd": "df -h"
+        "id": "2",
+        "cmd": "du -h -c"
       }
     ]
   }

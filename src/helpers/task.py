@@ -35,6 +35,7 @@ class Task:
                 self.parallel_tasks.put(task)
 
     def run(self):
+        parallels = []
         if not self.consolidate_only:
             Log.consolidate_log(task=self, hierarchy_node=self.parent)
         else:
@@ -44,8 +45,11 @@ class Task:
         while not self.parallel_tasks.empty():
             task = self.parallel_tasks.get()
             t = threading.Thread(target=task.run)
-            t.daemon = True
+            parallels.append(t)
             t.start()
+        for t in parallels:
+            t.join()
+
         while not self.sequential_tasks.empty():
             task = self.sequential_tasks.get()
             task.run()

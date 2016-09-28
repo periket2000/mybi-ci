@@ -4,7 +4,7 @@
     "id": "My_task_id_125.task",
     "sequential_tasks": [
       {
-        "id": "command.ls",
+        "id": "1.ls",
         "env": [
           {
             "DIR": "/tmp",
@@ -14,7 +14,7 @@
         "cmd": "ls $DIR/$FILE"
       },
       {
-        "id": "command.df",
+        "id": "2.df",
         "cmd": "df -h"
       }
     ]
