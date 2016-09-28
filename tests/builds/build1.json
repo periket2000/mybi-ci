@@ -11,7 +11,7 @@
             "FILE": "*"
           }
         ],
-        "cmd": "ls $DIR/$FILE"
+        "cmd": "ls $DIR/$FILE && sleep 1 && echo Hi"
       },
       {
         "id": "2",
