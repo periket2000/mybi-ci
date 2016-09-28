@@ -4,6 +4,7 @@ import pytest
 import os
 import helpers.env
 from validators.json_validator import JsonValidator
+from validators.tasks_schema import TasksSchema
 import json
 
 
@@ -14,35 +15,35 @@ env = helpers.env.read_config()
 
 @pytest.mark.validators
 class TestValidators:
-    schema = {
-        "type": "array",
-        "items": {"type": "number", "enum": [1, 2, 3]},
-        "minItems": 3,
+    schema2 = {
+        "type": "string",
+        "pattern": "^[a-z]+$"
     }
-    json_not_valid = ["spam", 2]
-    json_valid = [1, 2, 1]
+    json_not_valid = "a_b"
+    json_valid = "ab"
 
     def test_json_not_valid(self):
-        result = JsonValidator.validate(TestValidators.json_not_valid, TestValidators.schema)
+        result = JsonValidator.validate(TestValidators.json_not_valid, TestValidators.schema2)
         assert result['valid'] is False
 
     def test_json_valid(self):
-        result = JsonValidator.validate(TestValidators.json_valid, TestValidators.schema)
+        result = JsonValidator.validate(TestValidators.json_valid, TestValidators.schema2)
         assert result['valid'] is True
 
-    schema2 = {
+    schema = {
         "$schema": "http://json-schema.org/draft-04/schema#",
         "definitions": {
+            "identifier": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9\\.-_]+$"
+            },
             "task": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string",
-                        "pattern": "^[A-Za-z0-9\\.-_]+$"
-                    },
+                    "id": {"$ref": "#/definitions/identifier"},
                     "parallel_tasks": {
                         "type": "array",
-                        "properties": {
+                        "items": {
                             "anyOf": [
                                 {
                                     "$ref": "#/definitions/task"
@@ -55,7 +56,7 @@ class TestValidators:
                     },
                     "sequential_tasks": {
                         "type": "array",
-                        "properties": {
+                        "items": {
                             "anyOf": [
                                 {
                                     "$ref": "#/definitions/task"
@@ -83,13 +84,10 @@ class TestValidators:
             "command": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string",
-                        "pattern": "^[A-Za-z0-9\\.-_]+$"
-                    },
+                    "id": {"$ref": "#/definitions/identifier"},
                     "env": {
                         "type": "array",
-                        "properties": {
+                        "items": {
                             "property": {
                                 "type": "string"
                             },
@@ -157,7 +155,7 @@ class TestValidators:
     json_build4 = {
         "build": "my brand new build",
         "starter": {
-            "id": "My_task_id_125.task",
+            "id": "My_task_identifier.123",
             "cmd": "ls -l"
         }
     }
@@ -178,38 +176,80 @@ class TestValidators:
         "additional": "not allowed"
     }
 
+    json_build7 = {
+        "build": "my brand new build",
+        "starter": {
+            "id": "My_task_id_125.task",
+            "parallel_tasks": [
+                {
+                    "id": "command ls",
+                    "env": [
+                        {"DIR": "/tmp"},
+                        {"FILE": "*"}
+                    ],
+                    "cmd": "ls $DIR/$FILE"
+                },
+                {
+                    "id": "command df",
+                    "cmd": "df -h"
+                }
+            ]
+        }
+    }
+
+    json_build8 = {
+        "build": "my brand new build",
+        "starter": {
+            "id": "wrong id",
+            "cmd": "ls -l"
+        }
+    }
+
     def test_json_build(self):
-        result = JsonValidator.validate(TestValidators.json_build, TestValidators.schema2)
+        result = JsonValidator.validate(TestValidators.json_build, TestValidators.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build2, TestValidators.schema2)
+        result = JsonValidator.validate(TestValidators.json_build2, TestValidators.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build3, TestValidators.schema2)
+        result = JsonValidator.validate(TestValidators.json_build3, TestValidators.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build4, TestValidators.schema2)
+        result = JsonValidator.validate(TestValidators.json_build4, TestValidators.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build5, TestValidators.schema2)
+        result = JsonValidator.validate(TestValidators.json_build5, TestValidators.schema)
         assert result['valid'] is False
-        result = JsonValidator.validate(TestValidators.json_build6, TestValidators.schema2)
+        result = JsonValidator.validate(TestValidators.json_build6, TestValidators.schema)
+        assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build8, TestValidators.schema)
+        assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build7, TestValidators.schema)
         assert result['valid'] is False
 
     def test_json_from_schema_file(self):
-        schema_file = os.path.dirname(os.path.realpath(__file__)) + "/schema.json"
-        with open(schema_file) as data_file:
-            schema = json.load(data_file)
-        result = JsonValidator.validate(TestValidators.json_build, schema)
+        result = JsonValidator.validate(TestValidators.json_build, TasksSchema.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build2, schema)
+        result = JsonValidator.validate(TestValidators.json_build2, TasksSchema.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build3, schema)
+        result = JsonValidator.validate(TestValidators.json_build3, TasksSchema.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build4, schema)
+        result = JsonValidator.validate(TestValidators.json_build4, TasksSchema.schema)
         assert result['valid'] is True
-        result = JsonValidator.validate(TestValidators.json_build5, schema)
+        result = JsonValidator.validate(TestValidators.json_build5, TasksSchema.schema)
         assert result['valid'] is False
-        result = JsonValidator.validate(TestValidators.json_build6, schema)
+        result = JsonValidator.validate(TestValidators.json_build6, TasksSchema.schema)
+        assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build7, TasksSchema.schema)
         assert result['valid'] is False
 
     def test_json_file_from_schema_file(self):
+        schema_file = os.path.dirname(os.path.realpath(__file__)) + "/../builds/schema.json"
+        with open(schema_file) as data_file:
+            schema = json.load(data_file)
+        build_file = os.path.dirname(os.path.realpath(__file__)) + "/../builds/build1.json"
+        with open(build_file) as data_file:
+            build = json.load(data_file)
+        result = JsonValidator.validate(build, schema)
+        assert result['valid'] is True
+
+    def test_json_file_from_schema_file_local(self):
         schema_file = os.path.dirname(os.path.realpath(__file__)) + "/schema.json"
         with open(schema_file) as data_file:
             schema = json.load(data_file)
@@ -217,4 +257,4 @@ class TestValidators:
         with open(build_file) as data_file:
             build = json.load(data_file)
         result = JsonValidator.validate(build, schema)
-        assert result['valid'] is True
+        assert result['valid'] is False

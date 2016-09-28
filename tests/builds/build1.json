@@ -4,7 +4,7 @@
     "id": "My_task_id_125.task",
     "parallel_tasks": [
       {
-        "id": "wrong command ls",
+        "id": "command.ls",
         "env": [
           {"DIR": "/tmp"},
           {"FILE": "*"}
@@ -12,7 +12,7 @@
         "cmd": "ls $DIR/$FILE"
       },
       {
-        "id": "wrong id command df",
+        "id": "command.df",
         "cmd": "df -h"
       }
     ]
