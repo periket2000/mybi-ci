@@ -1,0 +1,7 @@
+{
+  "build": "my brand new build",
+  "starter": {
+    "id": "My_task_id_125.task",
+    "cmd": "ls -l"
+  }
+}

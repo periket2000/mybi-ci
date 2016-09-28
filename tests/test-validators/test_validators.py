@@ -4,6 +4,7 @@ import pytest
 import os
 import helpers.env
 from validators.json_validator import JsonValidator
+import json
 
 
 os.environ['MYBICI_SETUP_FILE'] = os.path.dirname(os.path.realpath(__file__)) + '/../../conf/env.pro'
@@ -168,6 +169,15 @@ class TestValidators:
         }
     }
 
+    json_build6 = {
+        "build": "my brand new build",
+        "starter": {
+            "id": "My_task_id_125.task",
+            "cmd": "ls -l"
+        },
+        "additional": "not allowed"
+    }
+
     def test_json_build(self):
         result = JsonValidator.validate(TestValidators.json_build, TestValidators.schema2)
         assert result['valid'] is True
@@ -179,3 +189,32 @@ class TestValidators:
         assert result['valid'] is True
         result = JsonValidator.validate(TestValidators.json_build5, TestValidators.schema2)
         assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build6, TestValidators.schema2)
+        assert result['valid'] is False
+
+    def test_json_from_schema_file(self):
+        schema_file = os.path.dirname(os.path.realpath(__file__)) + "/schema.json"
+        with open(schema_file) as data_file:
+            schema = json.load(data_file)
+        result = JsonValidator.validate(TestValidators.json_build, schema)
+        assert result['valid'] is True
+        result = JsonValidator.validate(TestValidators.json_build2, schema)
+        assert result['valid'] is True
+        result = JsonValidator.validate(TestValidators.json_build3, schema)
+        assert result['valid'] is True
+        result = JsonValidator.validate(TestValidators.json_build4, schema)
+        assert result['valid'] is True
+        result = JsonValidator.validate(TestValidators.json_build5, schema)
+        assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build6, schema)
+        assert result['valid'] is False
+
+    def test_json_file_from_schema_file(self):
+        schema_file = os.path.dirname(os.path.realpath(__file__)) + "/schema.json"
+        with open(schema_file) as data_file:
+            schema = json.load(data_file)
+        build_file = os.path.dirname(os.path.realpath(__file__)) + "/build1.json"
+        with open(build_file) as data_file:
+            build = json.load(data_file)
+        result = JsonValidator.validate(build, schema)
+        assert result['valid'] is True

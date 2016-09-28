@@ -1,0 +1,98 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "task": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9\\.-_]+$"
+                },
+                "parallel_tasks": {
+                    "type": "array",
+                    "properties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/task"
+                            },
+                            {
+                                "$ref": "#/definitions/command"
+                            }
+                        ]
+                    }
+                },
+                "sequential_tasks": {
+                    "type": "array",
+                    "properties": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/task"
+                            },
+                            {
+                                "$ref": "#/definitions/command"
+                            }
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "id"
+            ],
+            "anyOf": [
+                {
+                    "required": ["parallel_tasks"]
+                },
+                {
+                    "required": ["sequential_tasks"]
+                }
+            ],
+            "additionalProperties": 0
+        },
+        "command": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9\\.-_]+$"
+                },
+                "env": {
+                    "type": "array",
+                    "properties": {
+                        "property": {
+                            "type": "string"
+                        },
+                        "value": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "cmd": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id", "cmd"
+            ],
+            "additionalProperties": 0
+        }
+    },
+
+    "type": "object",
+    "properties": {
+        "build": {
+            "type": "string"
+        },
+        "starter": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/task"
+                },
+                {
+                    "$ref": "#/definitions/command"
+                }
+            ]
+        }
+    },
+    "required": ["build", "starter"],
+    "additionalProperties": 0
+}
