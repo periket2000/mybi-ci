@@ -4,6 +4,7 @@ from queue import Queue
 import threading
 import datetime
 from helpers.logging import Log
+from helpers.constants import Constants
 import os
 
 
@@ -11,6 +12,7 @@ class Task:
     def __init__(self, config, name):
         self.parent = None
         self.name = name
+        self.finish_status = Constants.CMD_OK
         self.config = config
         self.env = dict(os.environ)
         self.consolidate_only = True if config.get('global', 'log_consolidate_only') == "True" else False
@@ -42,7 +44,7 @@ class Task:
         # set it up in the os environment in order to be passed to the child tasks
         os.environ[key] = value
 
-    def run(self):
+    def run(self, result_queue=None):
         parallels = []
         if not self.consolidate_only:
             Log.consolidate_log(task=self, hierarchy_node=self.parent)
@@ -50,13 +52,23 @@ class Task:
             Log.set_log(self, consolidate_only=True)
 
         Log.id_log(self.log, "running task " + self.name)
+        t_queue = Queue()
         while not self.parallel_tasks.empty():
             task = self.parallel_tasks.get()
-            t = threading.Thread(target=task.run)
+            t = threading.Thread(target=task.run, args=[t_queue])
             parallels.append(t)
             t.start()
         while not self.sequential_tasks.empty():
             task = self.sequential_tasks.get()
             task.run()
+            if task.finish_status != Constants.CMD_OK:
+                self.finish_status = task.finish_status
         for t in parallels:
             t.join()
+            result = t_queue.get_nowait()
+            if result != Constants.CMD_OK:
+                self.finish_status = result
+
+        if result_queue:
+            result_queue.put(self.finish_status)
+        return self.finish_status

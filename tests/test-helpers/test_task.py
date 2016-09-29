@@ -4,6 +4,7 @@ import os
 import helpers.task
 import helpers.env
 from commands.command import Command
+from helpers.constants import Constants
 
 os.environ['MYBICI_SETUP_FILE'] = os.path.dirname(os.path.realpath(__file__)) + '/../../conf/env.pro'
 os.environ['MYBICI_SETUP_FILE_SECTIONS'] = 'global'
@@ -38,6 +39,35 @@ class TestTask:
         task.add_task(c2, sequential=False)
         task.add_task(c3, sequential=False)
         task.run()
+
+    @pytest.mark.seq_task_ko
+    def test_sequential_ko(self):
+        task = helpers.task.Task(env, 'test_parallel_tasks_ko')
+        c3 = Command(env, 'c3_parallel_ko')
+        c3.set_command('echo Hi!')
+        task.add_task(c3, sequential=False)
+        task2 = helpers.task.Task(env, 'test_log_tasks_2_ko')
+        c4 = Command(env, 'c4_ko')
+        c4.set_command('this.is.failing')
+        task2.add_task(c4)
+        task.add_task(task2)
+        task.run()
+        assert task.finish_status != Constants.CMD_OK
+
+    @pytest.mark.tryfirst
+    @pytest.mark.par_task_ko
+    def test_parallel_ko(self):
+        task = helpers.task.Task(env, 'test_parallel_tasks_ko')
+        c3 = Command(env, 'c3_parallel_ko')
+        c3.set_command('this.is.failing')
+        task.add_task(c3, sequential=False)
+        task2 = helpers.task.Task(env, 'test_log_tasks_2_ko')
+        c4 = Command(env, 'c4_ko')
+        c4.set_command('echo Hi!')
+        task2.add_task(c4)
+        task.add_task(task2)
+        task.run()
+        assert task.finish_status != Constants.CMD_OK
 
     """
     log comes ordered sequentially
