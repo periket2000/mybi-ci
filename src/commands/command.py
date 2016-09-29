@@ -19,7 +19,8 @@ class Command:
         self.start_time = datetime.datetime.now()
         self.log_file = self.id+'-'+self.start_time.strftime("%Y-%m-%d_%H:%M:%S")+'.log'
         # log to its own file
-        self.log = Log().setup(config=config, task_id=self.id, log_file=self.log_file)
+        self.build_id = os.getenv('MYBICI_BUILD_ID', None)
+        self.log = Log().setup(config=config, task_id=self.id, build_id=self.build_id, log_file=self.log_file)
 
     def set_command(self, command):
         self.command = command

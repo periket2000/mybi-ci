@@ -2,6 +2,7 @@ __author__ = 'marcoantonioalberoalbero'
 
 import logging
 import uuid
+import os
 
 
 class Log:
@@ -12,7 +13,7 @@ class Log:
     def __init__(self):
         self.default_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-    def setup(self, config, task_id, log_dir=None, log_file=None, with_console=True):
+    def setup(self, config, task_id, build_id=None, log_dir=None, log_file=None, with_console=True):
         """
         Setup the default logger for the task_id in question
         :param config: config environment
@@ -31,7 +32,12 @@ class Log:
         logger.setLevel(level)
         ld = (log_dir if log_dir else config.get('global', 'log_dir'))
         lf = (log_file if log_file else config.get('global', 'log_file'))
-        fh = logging.FileHandler(ld+'/'+lf)
+        if build_id:
+            if not os.path.exists(ld+'/'+build_id):
+                os.makedirs(ld+'/'+build_id)
+            fh = logging.FileHandler(ld+'/'+build_id+'/'+lf)
+        else:
+            fh = logging.FileHandler(ld+'/'+lf)
         formatter = logging.Formatter(log_format)
         fh.setFormatter(formatter)
         logger.addHandler(fh)
@@ -74,6 +80,7 @@ class Log:
             tid = task.id
         task.log = Log().setup(config=Log.config,
                                task_id=tid,
+                               build_id=task.build_id,
                                log_dir=l_dir,
                                log_file=l_file,
                                with_console=with_console)

@@ -24,7 +24,7 @@ class Loader:
                 os.environ['MYBICI_BUILD_ID'] = str(uuid.uuid1())
                 Log.id_log(Loader.logger, "Loading build '" + build["build"] + "'")
                 task = Loader.load(build["starter"])
-                Log.id_log(Loader.logger, "Load of '" + build["build"] + "' [OK]")
+                Log.id_log(Loader.logger, "Load of '" + build["build"] + "' [OK], BUILD ID: " + os.environ['MYBICI_BUILD_ID'])
                 return task
             else:
                 Log.id_log(Loader.logger, "Build file format not valid (" + file + ")")
