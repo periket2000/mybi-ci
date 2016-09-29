@@ -40,6 +40,7 @@ class Executor:
             if options.build:
                 Log.id_log(self.logger, "Running " + args[1])
                 task.run()
+                Log.id_log(self.logger, "Your build ID: " + os.environ['MYBICI_BUILD_ID'] + " has finished.")
             sys.exit(0)
 
         self.parser.print_usage()

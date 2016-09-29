@@ -1,0 +1,29 @@
+{
+  "build": "Frontoffice build",
+  "starter": {
+    "id": "Frontoffice.build.starter",
+    "env": [
+      {
+        "WORKSPACE": "/tmp"
+      }
+    ],
+    "sequential_tasks": [
+      {
+        "id": "setup.centralized.dir",
+        "cmd": "mkdir -p $WORKSPACE/$MYBICI_BUILD_ID"
+      },
+      {
+        "id": "svn.checkout",
+        "env": [{
+          "USER": "username",
+          "PASS": "password"
+        }],
+        "cmd": "svn co --non-interactive --trust-server-cert --username=$USER --password=$PASS https://svnrepodir.com/trunk $WORKSPACE/$MYBICI_BUILD_ID/SVN"
+      },
+      {
+        "id": "mvn.build",
+        "cmd": "cd $WORKSPACE/$MYBICI_BUILD_ID/SVN; mvn clean install -Dmaven.test.skip=true"
+      }
+    ]
+  }
+}
