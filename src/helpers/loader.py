@@ -6,6 +6,8 @@ from validators.json_validator import JsonValidator
 from validators.tasks_schema import TasksSchema
 from helpers.logging import Log
 import json
+import os
+import uuid
 
 
 class Loader:
@@ -19,6 +21,7 @@ class Loader:
             build = json.load(data_file)
             result = JsonValidator.validate(build, TasksSchema.schema)
             if result['valid'] is True:
+                os.environ['MYBICI_BUILD_ID'] = str(uuid.uuid1())
                 Log.id_log(Loader.logger, "Loading build '" + build["build"] + "'")
                 task = Loader.load(build["starter"])
                 Log.id_log(Loader.logger, "Load of '" + build["build"] + "' [OK]")
