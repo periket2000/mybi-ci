@@ -14,6 +14,17 @@ class TasksSchema:
                 "type": "object",
                 "properties": {
                     "id": {"$ref": "#/definitions/identifier"},
+                    "env": {
+                        "type": "array",
+                        "items": {
+                            "property": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    },
                     "parallel_tasks": {
                         "type": "array",
                         "items": {

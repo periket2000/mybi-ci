@@ -37,6 +37,10 @@ class Loader:
     @staticmethod
     def load_task(json_data):
         task = Task(Loader.env, json_data["id"])
+        if "env" in json_data:
+            for entry in json_data["env"]:
+                for k in entry.keys():
+                    task.add_env_var(k, entry[k])
         if "parallel_tasks" in json_data:
             for t in json_data["parallel_tasks"]:
                 if Loader.is_command(t):

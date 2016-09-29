@@ -4,6 +4,7 @@ from queue import Queue
 import threading
 import datetime
 from helpers.logging import Log
+import os
 
 
 class Task:
@@ -11,6 +12,7 @@ class Task:
         self.parent = None
         self.name = name
         self.config = config
+        self.env = dict(os.environ)
         self.consolidate_only = True if config.get('global', 'log_consolidate_only') == "True" else False
         self.parallel_tasks = Queue()
         self.sequential_tasks = Queue()
@@ -33,6 +35,11 @@ class Task:
                 self.sequential_tasks.put(task)
             else:
                 self.parallel_tasks.put(task)
+
+    def add_env_var(self, key, value):
+        self.env[key] = value
+        # set it up in the os environment in order to be passed to the child tasks
+        os.environ[key] = value
 
     def run(self):
         parallels = []

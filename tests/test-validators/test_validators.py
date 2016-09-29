@@ -41,6 +41,17 @@ class TestValidators:
                 "type": "object",
                 "properties": {
                     "id": {"$ref": "#/definitions/identifier"},
+                    "env": {
+                        "type": "array",
+                        "items": {
+                            "property": {
+                                "type": "string"
+                            },
+                            "value": {
+                                "type": "string"
+                            }
+                        }
+                    },
                     "parallel_tasks": {
                         "type": "array",
                         "items": {
@@ -205,6 +216,14 @@ class TestValidators:
         }
     }
 
+    json_build9 = {
+        "build": "my brand new build",
+        "starter": {
+            "id": "1id",
+            "env": []
+        }
+    }
+
     def test_json_build(self):
         result = JsonValidator.validate(TestValidators.json_build, TestValidators.schema)
         assert result['valid'] is True
@@ -222,6 +241,8 @@ class TestValidators:
         assert result['valid'] is False
         result = JsonValidator.validate(TestValidators.json_build7, TestValidators.schema)
         assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build9, TestValidators.schema)
+        assert result['valid'] is False
 
     def test_json_from_schema_file(self):
         result = JsonValidator.validate(TestValidators.json_build, TasksSchema.schema)
@@ -237,6 +258,10 @@ class TestValidators:
         result = JsonValidator.validate(TestValidators.json_build6, TasksSchema.schema)
         assert result['valid'] is False
         result = JsonValidator.validate(TestValidators.json_build7, TasksSchema.schema)
+        assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build8, TestValidators.schema)
+        assert result['valid'] is False
+        result = JsonValidator.validate(TestValidators.json_build9, TestValidators.schema)
         assert result['valid'] is False
 
     def test_json_file_from_schema_file(self):
