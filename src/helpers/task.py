@@ -47,9 +47,8 @@ class Task:
             t = threading.Thread(target=task.run)
             parallels.append(t)
             t.start()
-        for t in parallels:
-            t.join()
-
         while not self.sequential_tasks.empty():
             task = self.sequential_tasks.get()
             task.run()
+        for t in parallels:
+            t.join()
