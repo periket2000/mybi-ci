@@ -19,15 +19,21 @@ class Loader:
     def load_from_file(file):
         with open(file) as data_file:
             build = json.load(data_file)
-            result = JsonValidator.validate(build, TasksSchema.schema)
-            if result['valid'] is True:
-                os.environ['MYBICI_BUILD_ID'] = str(uuid.uuid1())
-                Log.id_log(Loader.logger, "Loading build '" + build["build"] + "'")
-                task = Loader.load(build["starter"])
-                Log.id_log(Loader.logger, "Load of '" + build["build"] + "' [OK], BUILD ID: " + os.environ['MYBICI_BUILD_ID'])
-                return task
-            else:
+            task = Loader.build_root_task(build)
+            if not task:
                 Log.id_log(Loader.logger, "Build file format not valid (" + file + ")")
+            return task
+
+    @staticmethod
+    def build_root_task(build):
+        result = JsonValidator.validate(build, TasksSchema.schema)
+        if result['valid'] is True:
+            os.environ['MYBICI_BUILD_ID'] = str(uuid.uuid1())
+            Log.id_log(Loader.logger, "Loading build '" + build["build"] + "'")
+            task = Loader.load(build["starter"])
+            Log.id_log(Loader.logger, "Load of '" + build["build"] + "' [OK], BUILD ID: " + os.environ['MYBICI_BUILD_ID'])
+            return task
+        return None
 
     @staticmethod
     def load(json_data):
