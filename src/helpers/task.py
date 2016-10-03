@@ -44,7 +44,7 @@ class Task:
         # set it up in the os environment in order to be passed to the child tasks
         os.environ[key] = os.path.expandvars(value)
 
-    def run(self, result_queue=None):
+    def run(self, result_queue=None, stop_on_error=True):
         parallels = []
         if not self.consolidate_only:
             Log.consolidate_log(task=self, hierarchy_node=self.parent)
@@ -63,6 +63,8 @@ class Task:
             task.run()
             if task.finish_status != Constants.CMD_OK:
                 self.finish_status = task.finish_status
+                if stop_on_error:
+                    break
         for t in parallels:
             t.join()
             result = t_queue.get_nowait()
@@ -71,4 +73,5 @@ class Task:
 
         if result_queue:
             result_queue.put(self.finish_status)
+        Log.id_log(self.log, "Task " + self.name + " finished with status: " + str(self.finish_status))
         return self.finish_status

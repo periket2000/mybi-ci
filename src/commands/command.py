@@ -51,4 +51,5 @@ class Command:
             Log.id_log(self.log, line)
         if result_queue:
             result_queue.put(self.finish_status)
+        Log.id_log(self.log, "Task " + self.name + " finished with status: " + str(self.finish_status))
         return self.finish_status
