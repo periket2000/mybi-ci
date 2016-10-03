@@ -16,6 +16,79 @@ pip install mybi-ci
 
 After install the command line tool, you'll get a "mybi-ci" comman line tool ready to run.
 
+### Runing it as server (opens a port on localhost:5000)
+```python
+mybi-ci -s
+```
+
+After that we can access the rest api (it's open)
+```python
+http://localhost:5000/
+```
+
+and this shows the API posible calls
+```json
+{
+  "title": "Mybi-ci REST API", 
+  "urls": [
+    "/ (GET)", 
+    "/run (POST)", 
+    "/log/<build_id>/<log_file> (GET)"
+  ]
+}
+```
+and we can send build task like this (by post, try with postman or curl)
+
+* Note: $MYBICI_BUILD_ID is a built-in variable with a unique identifier to the build.
+```json
+{
+  "build": "My build",
+  "starter": {
+    "id": "My.build.starter",
+    "env": [
+      {
+        "WORKSPACE": "/tmp",
+        "MAVEN_HOME": "/maven/install/dir/apache-maven-3.3.9",
+        "PATH": "$PATH:$MAVEN_HOME/bin"
+      }
+    ],
+    "sequential_tasks": [
+      {
+        "id": "setup.centralized.dir",
+        "cmd": "mkdir -p $WORKSPACE/$MYBICI_BUILD_ID"
+      },
+      {
+        "id": "svn.checkout",
+        "env": [{
+          "USER": "username",
+          "PASS": "user_password"
+        }],
+        "cmd": "svn co --non-interactive --trust-server-cert --username=$USER --password=$PASS https://svn_dir/trunk $WORKSPACE/$MYBICI_BUILD_ID/SVN"
+      },
+      {
+        "id": "mvn.build",
+        "cmd": "cd $WORKSPACE/$MYBICI_BUILD_ID/SVN; mvn clean install -Dmaven.test.skip=true"
+      }
+    ]
+  }
+}
+```
+
+Once executed you'll get a response like:
+```json
+{
+    "build_id": "9760836c-8974-11e6-861c-60f81db6415a",
+    "log_file": "helpers.task.Frontoffice.build.starter-2016-10-03_16:20:53.log",
+    "task": "helpers.task.Frontoffice.build.starter"
+}
+```
+
+And you'll be able to see the task logs with the following url:
+```python
+http://localhost:5000/log/<build_id>/<log_file>
+http://localhost:5000/log/9760836c-8974-11e6-861c-60f81db6415a/helpers.task.Frontoffice.build.starter-2016-10-03_16:20:53.log
+```
+
 ### Notes on Logging
 
 1. Commands and Tasks name should be unique because if not, the loggers are going to log several times
