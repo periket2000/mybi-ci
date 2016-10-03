@@ -11,7 +11,7 @@
 # limitations under the License.
 
 __version__ = "1.0.0"
-__description__ = "Mybi CI build tool"
+__description__ = "Mybi CI (continuous integration) build tool"
 __license__ = "Apache License, Version 2.0"
 __uri__ = "https://www.mybi.es"
 __author__ = "Marco Antonio Albero Albero"

@@ -17,6 +17,29 @@ pip install mybi-ci
 After install the command line tool, you'll get a "mybi-ci" comman line tool ready to run.
 
 ### Runing it as server (opens a port on localhost:5000)
+
+1. Define a configuration file with the following contents:
+```sh
+[global]
+program=MYBI-CI
+log_dir=/tmp
+log_file=mybi-ci.log
+log_level=
+log_format=
+# False, each task logs to its file and its ancestors file
+# True, every task logs to the global file
+log_consolidate_only=False
+#server port
+server_port=5000
+```
+
+2. Export the variables to point this file and load the global section:
+```sh
+export  MYBICI_SETUP_FILE="/PATH/TO/THE/FILE/ABOVE"
+export MYBICI_SETUP_FILE_SECTIONS="global"
+```
+
+3. After this, you can run the server like this:
 ```python
 mybi-ci -s
 ```

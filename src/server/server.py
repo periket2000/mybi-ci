@@ -16,7 +16,7 @@ class Server:
     @staticmethod
     def run():
         Server.setup()
-        app.run()
+        app.run(port=int(env.get('global', 'server_port', fallback=5000)))
 
     @staticmethod
     @app.route('/')
