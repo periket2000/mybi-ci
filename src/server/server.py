@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request, Response
 from helpers.loader import Loader
 from helpers.threads import Threads
+from helpers.env import read_config
 
 app = Flask(__name__)
+env = read_config()
 
 
 class Server:
@@ -22,7 +24,8 @@ class Server:
         return jsonify({"title": "Mybi-ci REST API",
                         "urls": [
                             "/ (GET)",
-                            "/run (POST)"
+                            "/run (POST)",
+                            "/log/<build_id>/<log_file> (GET)"
                         ]})
 
     @staticmethod
@@ -46,6 +49,6 @@ class Server:
     @staticmethod
     @app.route('/log/<build_id>/<log_file>', methods=['GET'])
     def g_log(build_id, log_file):
-        with open("/tmp/"+build_id+"/"+log_file) as f:
+        with open(env.get('global', 'log_dir')+"/"+build_id+"/"+log_file) as f:
             content = f.readlines()
         return Response(content, mimetype='text/plain')
