@@ -4,7 +4,9 @@
     "id": "Frontoffice.build.starter",
     "env": [
       {
-        "WORKSPACE": "/tmp"
+        "WORKSPACE": "/tmp",
+        "MAVEN_HOME": "/path/to/maven/root/apache-maven-3.3.9",
+        "PATH": "$PATH:$MAVEN_HOME/bin"
       }
     ],
     "sequential_tasks": [

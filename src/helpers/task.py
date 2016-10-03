@@ -40,9 +40,9 @@ class Task:
                 self.parallel_tasks.put(task)
 
     def add_env_var(self, key, value):
-        self.env[key] = value
+        self.env[key] = os.path.expandvars(value)
         # set it up in the os environment in order to be passed to the child tasks
-        os.environ[key] = value
+        os.environ[key] = os.path.expandvars(value)
 
     def run(self, result_queue=None):
         parallels = []

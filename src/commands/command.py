@@ -26,7 +26,7 @@ class Command:
         self.command = command
 
     def add_env_var(self, key, value):
-        self.env[key] = value
+        self.env[key] = os.path.expandvars(value)
 
     def run(self, result_queue=None):
         if not self.consolidate_only:

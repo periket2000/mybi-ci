@@ -33,7 +33,7 @@ class Server:
         if task:
             Threads.run_detached(task.run)
             return jsonify({
-                "result": "OK",
+                "result": task.finish_status,
                 "log_file": task.log_file,
                 "build_id": task.build_id,
                 "build": task.id
