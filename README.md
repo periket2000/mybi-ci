@@ -1,4 +1,4 @@
-# [Mybi CI] command line tool
+# [Mybi CI] command line tool [![Build Status](https://travis-ci.org/periket2000/mybi-ci.svg?branch=master)](https://travis-ci.org/periket2000/mybi-ci)
 
 This tool is intended to provide a CI build tool for your projects.
 
