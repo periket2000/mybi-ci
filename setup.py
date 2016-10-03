@@ -17,8 +17,7 @@ CLASSIFIERS = [
     "Intended Audience :: System Administrators",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: Implementation :: PyPy"
+    "Programming Language :: Python :: 3.5"
 ]
 INSTALL_REQUIRES = [
     'jsonschema>=2.5.1',
