@@ -10,7 +10,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__version__ = "1.4.0"
+__version__ = "1.6.0"
 __description__ = "Mybi CI (continuous integration) build tool"
 __license__ = "Apache License, Version 2.0"
 __uri__ = "https://www.mybi.es"
