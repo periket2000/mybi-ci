@@ -16,7 +16,8 @@ class Server:
     @staticmethod
     def run():
         Server.setup()
-        app.run(port=int(env.get('global', 'server_port', fallback=5000)))
+        port = env.get('global', 'server_port') if env.get('global', 'server_port') else 5000
+        app.run(port=int(port))
 
     @staticmethod
     @app.route('/')

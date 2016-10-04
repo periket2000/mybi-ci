@@ -1,6 +1,9 @@
 __author__ = 'marcoantonioalberoalbero'
 
-import configparser
+try:
+    import configparser
+except:
+    import ConfigParser as configparser
 import os
 
 

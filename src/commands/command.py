@@ -3,7 +3,7 @@ __author__ = 'marcoantonioalberoalbero'
 import os
 import subprocess
 import datetime
-from helpers.logging import Log
+from helpers.valdano import Log
 
 
 class Command:

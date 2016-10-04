@@ -9,4 +9,4 @@ log_format=
 # If True, everything is in one file and could be messy. Each build has a uuid in the log where you can grep.
 log_consolidate_only=False
 #server port
-server_port=5000
+server_port=

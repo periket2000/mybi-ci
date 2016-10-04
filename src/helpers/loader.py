@@ -4,7 +4,7 @@ from commands.command import Command
 from helpers.env import read_config
 from validators.json_validator import JsonValidator
 from validators.tasks_schema import TasksSchema
-from helpers.logging import Log
+from helpers.valdano import Log
 import json
 import os
 import uuid

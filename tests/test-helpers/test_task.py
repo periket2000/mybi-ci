@@ -92,7 +92,7 @@ class TestTask:
         """
         Complete logging, automatic config
         """
-        env['global']['log_consolidate_only'] = "True"
+        env.set('global', 'log_consolidate_only', "True")
         task = helpers.task.Task(env, 'test_log_tasks')
         c1 = Command(env, 'c1_log')
         c1.set_command('ls -l')
@@ -115,7 +115,7 @@ class TestTask:
         """
         Complete logging, automatic config
         """
-        env['global']['log_consolidate_only'] = "False"
+        env.set('global', 'log_consolidate_only', "False")
         task = helpers.task.Task(env, 'test_log_tasks')
         c1 = Command(env, 'c1_log')
         c1.set_command('ls -l')

@@ -4,7 +4,7 @@ import optparse
 import os.path
 import sys
 from helpers.loader import Loader
-from helpers.logging import Log
+from helpers.valdano import Log
 from helpers.env import read_config
 from server.server import Server
 

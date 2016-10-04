@@ -1,9 +1,12 @@
 __author__ = 'marcoantonioalberoalbero'
 
-from queue import Queue
+try:
+    from Queue import Queue
+except:
+    from queue import Queue
 import threading
 import datetime
-from helpers.logging import Log
+from helpers.valdano import Log
 from helpers.constants import Constants
 import os
 

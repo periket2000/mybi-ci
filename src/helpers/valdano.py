@@ -9,6 +9,14 @@ class Log:
 
     config = None
     consolidate_only = None
+    CRITICAL = 50
+    FATAL = CRITICAL
+    ERROR = 40
+    WARNING = 30
+    WARN = WARNING
+    INFO = 20
+    DEBUG = 10
+    NOTSET = 0
 
     def __init__(self):
         self.default_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -24,7 +32,7 @@ class Log:
         """
         Log.config = config
         Log.consolidate_only = True if config.get('global', 'log_consolidate_only') == "True" else False
-        level = (logging.DEBUG if 'debug' in config.get('global', 'log_level') else logging.INFO)
+        level = (logging.DEBUG if 'debug' in config.get('global', 'log_level') else Log.INFO)
         log_format = (config.get('global', 'log_format')
                       if config.get('global', 'log_format')
                       else self.default_format)
@@ -48,7 +56,7 @@ class Log:
         return logger
 
     @staticmethod
-    def id_log(logger=None, msg=None, level=logging.INFO):
+    def id_log(logger=None, msg=None, level=INFO):
         """
         Log with a uuid for track the log of the task/command
         :param logger: logger who's going to log
@@ -56,9 +64,9 @@ class Log:
         :param level: level to log
         :return:
         """
-        if logger and msg and level == logging.INFO:
+        if logger and msg and level == Log.INFO:
             logger.info(str(uuid.uuid1()) + " - " + msg)
-        if logger and msg and level == logging.DEBUG:
+        if logger and msg and level == Log.DEBUG:
             logger.debug(str(uuid.uuid1()) + " - " + msg)
 
     @staticmethod
