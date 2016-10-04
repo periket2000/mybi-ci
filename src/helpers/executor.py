@@ -35,7 +35,7 @@ class Executor:
             Server.run()
             sys.exit(0)
 
-        if options.test or options.build and len(args) == 2:
+        if (options.test or options.build) and len(args) == 2:
             file_path = args[1]
             op = "Testing " if options.test else "Building "
             if os.path.isfile(file_path):

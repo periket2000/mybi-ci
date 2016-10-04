@@ -12,5 +12,7 @@ def read_config():
         config = configparser.ConfigParser()
         config.read(init)
     except:
-        raise Exception("Need to define MYBICI_SETUP_FILE and MYBICI_SETUP_FILE_SECTIONS environment variables")
+        raise Exception("Need to define MYBICI_SETUP_FILE and "
+                        "MYBICI_SETUP_FILE_SECTIONS environment "
+                        "variables (https://github.com/periket2000/mybi-ci)")
     return config
