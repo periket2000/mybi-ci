@@ -1,6 +1,6 @@
 __author__ = 'marcoantonioalberoalbero'
 from helpers.task import Task
-from commands.command import Command
+from ants.command import Command
 from helpers.env import read_config
 from validators.json_validator import JsonValidator
 from validators.tasks_schema import TasksSchema

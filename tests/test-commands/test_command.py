@@ -1,7 +1,7 @@
 import mock
 import pytest
 import os
-from commands.command import Command
+from ants.command import Command
 import helpers.env
 
 os.environ['MYBICI_SETUP_FILE'] = os.path.dirname(os.path.realpath(__file__)) + '/../../conf/env.pro'

@@ -3,7 +3,7 @@ import pytest
 import os
 import helpers.task
 import helpers.env
-from commands.command import Command
+from ants.command import Command
 from helpers.constants import Constants
 
 os.environ['MYBICI_SETUP_FILE'] = os.path.dirname(os.path.realpath(__file__)) + '/../../conf/env.pro'
