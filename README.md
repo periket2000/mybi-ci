@@ -2,15 +2,39 @@
 
 This tool is intended to provide a CI build tool for your projects.
 
-### Installing the package locally
+## Options for running the tool
+
+### 1. Running it as a developer
+
+Clone the repository.
+
+```sh
+# Create a virtualenv and activate it with python 3.5 or python 2.7
+# get into the project dir
+cd mybi-ci
+# setup environment
+export  MYBICI_SETUP_FILE=$PWD/env.pro
+export MYBICI_SETUP_FILE_SECTIONS=global
+export PYTHONPATH=$PWD/src:$PYTHONPATH
+# install dependencies
+pip install -f requirements.txt
+# run tests
+pytest
+# run the tool
+python ./bin/mybi-ci
+```
+
+### 2. Installing the package locally
 ```python
 python setup.py install
 ```
 
-### Installing the package with Pypi
+### 3. Installing the package with Pypi
 ```python
 pip install mybi-ci
 ```
+
+## Mandatory setup
 
 ### Executable inteface
 
@@ -111,6 +135,8 @@ And you'll be able to see the task logs with the following url:
 http://localhost:5000/log/<build_id>/<log_file>
 http://localhost:5000/log/9760836c-8974-11e6-861c-60f81db6415a/helpers.task.Frontoffice.build.starter-2016-10-03_16:20:53.log
 ```
+
+## Misc topics
 
 ### Notes on Logging
 

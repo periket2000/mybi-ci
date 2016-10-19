@@ -17,12 +17,15 @@ class Loader:
 
     @staticmethod
     def load_from_file(file):
-        with open(file) as data_file:
-            build = json.load(data_file)
-            task = Loader.build_root_task(build)
-            if not task:
-                Log.id_log(Loader.logger, "Build file format not valid (" + file + ")")
-            return task
+        try:
+            with open(file) as data_file:
+                build = json.load(data_file)
+                task = Loader.build_root_task(build)
+                if not task:
+                    Log.id_log(Loader.logger, "Build file format not valid (" + file + ")")
+                return task
+        except json.decoder.JSONDecodeError:
+            Log.id_log(Loader.logger, file + ": JSON not valid.")
 
     @staticmethod
     def build_root_task(build):

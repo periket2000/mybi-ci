@@ -44,7 +44,7 @@ class Executor:
             else:
                 Log.id_log(self.logger, str(args[1]) + " is not a valid file")
                 sys.exit(0)
-            if options.build:
+            if options.build and task:
                 Log.id_log(self.logger, "Running " + args[1])
                 task.run()
                 Log.id_log(self.logger, "Your build ID: "
