@@ -63,7 +63,7 @@ export MYBICI_SETUP_FILE_SECTIONS="global"
 
 ### 1. Execute Standalone tasks from a definition files
 
-```python
+```sh
 # test mode (only check if the build definition is ok)
 mybi-ci -t <build_file>
 
@@ -74,12 +74,12 @@ mybi-ci -b <build_file>
 ### 2. Runing it as server accepting json tasks (opens a port on localhost:5000)
 
 You can run the server like this:
-```python
+```sh
 mybi-ci -s
 ```
 
 After that we can access the rest api (it's open)
-```python
+```sh
 http://localhost:5000/
 ```
 
@@ -141,7 +141,7 @@ Once executed you'll get a response like:
 ```
 
 And you'll be able to see the task logs with the following url:
-```python
+```sh
 http://localhost:5000/log/<build_id>/<log_file>
 http://localhost:5000/log/9760836c-8974-11e6-861c-60f81db6415a/helpers.task.Frontoffice.build.starter-2016-10-03_16:20:53.log
 ```
@@ -189,7 +189,7 @@ Tests are developed with pytest and are marked by categories.
 If no category is given, all tests bt those marked as skip are executed.
 If a category is give, only those with the category are executed.
 
-```python
+```sh
 # execute all tests but those with skip mark
 pytest
 
