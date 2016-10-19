@@ -4,7 +4,7 @@ This tool is intended to provide a CI build tool for your projects.
 
 ## Options for running the tool
 
-### 1. Running it as a developer
+### 1. Running it as a develoer
 
 Clone the repository.
 
@@ -36,11 +36,7 @@ pip install mybi-ci
 
 ## Mandatory setup
 
-### Executable inteface
-
-After install the command line tool, you'll get a "mybi-ci" comman line tool ready to run.
-
-### Runing it as server (opens a port on localhost:5000)
+### Configuration file
 
 1. Define a configuration file with the following contents:
 ```sh
@@ -63,7 +59,21 @@ export  MYBICI_SETUP_FILE="/PATH/TO/THE/FILE/ABOVE"
 export MYBICI_SETUP_FILE_SECTIONS="global"
 ```
 
-3. After this, you can run the server like this:
+## Running modes
+
+### 1. Execute Standalone tasks from a definition files
+
+```python
+# test mode (only check if the build definition is ok)
+mybi-ci -t <build_file>
+
+# build mode (starts the building)
+mybi-ci -b <build_file>
+```
+
+### 2. Runing it as server accepting json tasks (opens a port on localhost:5000)
+
+You can run the server like this:
 ```python
 mybi-ci -s
 ```
