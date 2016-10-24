@@ -38,7 +38,7 @@ pip install mybi-ci
 
 ### Configuration file
 
-1. Define a configuration file with the following contents:
+* Define a configuration file with the following contents:
 ```sh
 [global]
 program=MYBI-CI
@@ -53,7 +53,7 @@ log_consolidate_only=False
 server_port=5000
 ```
 
-2. Export the variables to point this file and load the global section:
+* Export the variables to point this file and load the global section:
 ```sh
 export  MYBICI_SETUP_FILE="/PATH/TO/THE/FILE/ABOVE"
 export MYBICI_SETUP_FILE_SECTIONS="global"
@@ -150,7 +150,7 @@ http://localhost:5000/log/9760836c-8974-11e6-861c-60f81db6415a/helpers.task.Fron
 
 ### Notes on Logging
 
-1. Commands and Tasks name should be unique because if not, the loggers are going to log several times
+* Commands and Tasks name should be unique because if not, the loggers are going to log several times
 
 ```python
 # if we run
@@ -171,11 +171,11 @@ cn.run()
 # cn.logger is called "MYBI-CI.commands.command.c1"
 ```
 
-2. The system log is configured depending on the 'global':'log_consolidate_only' config value.
+* The system log is configured depending on the 'global':'log_consolidate_only' config value.
 If this value is True, all the tasks and sub tasks log to the global consolidated log file.
 If this value if False, all the tasks logs to its own log file and to its ancestors (not only the parent) log file.
 
-3. By default, each Task/Command comes with its own log file configured when the object is created.
+* By default, each Task/Command comes with its own log file configured when the object is created.
 But if we choose log_consolidated_only=True, this log file is overwrite by the global system log file. 
 
 ```python
